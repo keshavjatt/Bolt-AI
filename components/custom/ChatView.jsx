@@ -32,7 +32,7 @@ function ChatView() {
 
     return (
       <div className='relative h-[85vh] flex flex-col'>
-        <div className='flex-1'>
+        <div className='flex-1 overflow-y-scroll'>
           {messages?.map((msg, index) => (
             <div
               key={index}
