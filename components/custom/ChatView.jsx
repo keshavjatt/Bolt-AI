@@ -7,8 +7,8 @@ import Lookup from '@/data/Lookup';
 import { useConvex } from 'convex/react';
 import { ArrowRight, Link } from 'lucide-react';
 import Image from 'next/image';
-import { useParams } from 'next/navigation'
-import React, { useContext, useEffect, useState } from 'react'
+import { useParams } from 'next/navigation';
+import React, { useContext, useEffect, useState } from 'react';
 
 function ChatView() {
     const {id} = useParams();
