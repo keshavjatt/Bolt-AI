@@ -29,7 +29,7 @@ function ChatView() {
         const result = await convex.query(api.workspace.GetWorkspace, {
             workspaceId: id
         });
-        setMessages(result?.messages)  // Correct function use karo
+        setMessages(result?.messages);  // Correct function use karo
         console.log(result);
     }
 
