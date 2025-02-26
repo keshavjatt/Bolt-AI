@@ -6,11 +6,12 @@ import Colors from '@/data/Colors';
 import Lookup from '@/data/Lookup';
 import Prompt from '@/data/Prompt';
 import axios from 'axios';
-import { useConvex } from 'convex/react';
+import { useConvex, useMutation } from 'convex/react';
 import { ArrowRight, Link, Loader2Icon } from 'lucide-react';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import React, { useContext, useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 
 function ChatView() {
     const {id} = useParams();
@@ -19,7 +20,7 @@ function ChatView() {
     const {messages, setMessages} = useContext(MessagesContext);  // yaha setMessages use karo
     const [userInput, setUserInput] = useState();
     const [loading, setLoading] = useState(false);
-
+    const UpdateMessages=useMutation(api.workspace.UpdateMessages)
     useEffect(()=>{
         id && GetWorkspaceData();
     },[id])
@@ -50,11 +51,16 @@ function ChatView() {
       const result = await axios.post('/api/ai-chat', {
         prompt:PROMPT
       });
-      console.log(result.data.result);
-      setMessages(prev=>[...prev, {
+
+      const aiResp={
         role : 'ai',
         content : result.data.result
-      }])
+      }
+      setMessages(prev=>[...prev, aiResp])
+      await UpdateMessages({
+        messages: [...messages, aiResp],
+        workspaceId: id
+      })
       setLoading(false);
     }
 
@@ -62,7 +68,8 @@ function ChatView() {
       setMessages(prev=>[...prev, {
         role : 'user',
         content : input
-      }])
+      }]);
+      setUserInput('')
     }
 
     return (
@@ -85,7 +92,9 @@ function ChatView() {
                   className="rounded-full"
                 />
               )}
-              <h2>{msg.content}</h2>
+              <div className='flex flex-col'>
+                <ReactMarkdown>{msg.content}</ReactMarkdown>
+              </div>
             </div>
           ))}
           {loading && (
@@ -106,6 +115,7 @@ function ChatView() {
           <div className="flex gap-2">
             <textarea
               placeholder={Lookup.INPUT_PLACEHOLDER}
+              value={userInput}
               onChange={(event) => setUserInput(event.target.value)}
               className="outline-none bg-transparent w-full h-32 max-h-56 resize-none"
             />
