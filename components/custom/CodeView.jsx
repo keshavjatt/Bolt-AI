@@ -11,11 +11,28 @@ import Lookup from "@/data/Lookup";
 import { MessagesContext } from "@/context/MessagesContext";
 import Prompt from "@/data/Prompt";
 import axios from "axios";
+import { useConvex, useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { useParams } from "next/navigation";
 
 function CodeView() {
+  const {id}=useParams();
   const [activeTab, setActiveTab] = useState('code');
   const [files, setFiles]=useState(Lookup?.DEFAULT_FILE)
   const {messages, SetMessages}=useContext(MessagesContext);
+  const UpdateFiles=useMutation(api.workspace.UpdateFiles);
+  const convex=useConvex();
+
+  useEffect(()=>{
+
+  },[id])
+
+  const GetFiles=async()=>{
+    const result = await convex.query(api.workspace.GetWorkspace, {
+      workspaceId : id,
+      
+    })
+  }
 
   useEffect(() => {
     if (messages?.length > 0) {
@@ -27,7 +44,7 @@ function CodeView() {
   }, [messages]);
 
   const GenerateAiCode=async()=>{
-    const PROMPT = messages[messages?.length-1]?.content+" "+Prompt.CODE_GEN_PROMPT;
+    const PROMPT = JSON.stringify(messages)+" "+Prompt.CODE_GEN_PROMPT;
     const result = await axios.post('/api/gen-ai-code', {
       prompt : PROMPT
     })
@@ -36,6 +53,11 @@ function CodeView() {
 
     const mergedFiles = {...Lookup.DEFAULT_FILE, ...aiResp?.files}
     setFiles(mergedFiles);
+    await UpdateFiles({
+      workspaceId : id,
+      files:aiResp?.files
+
+    });
   } 
 
   return (
