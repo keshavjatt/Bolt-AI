@@ -5,11 +5,12 @@ import {
     SidebarFooter,
     SidebarGroup,
     SidebarHeader,
-  } from "@/components/ui/sidebar"
-import Image from 'next/image'
-import { Button } from '../ui/button'
-import { MessageCircleCode } from 'lucide-react'
-import WorkspaceHistory from './WorkspaceHistory'
+  } from "@/components/ui/sidebar";
+import Image from 'next/image';
+import { Button } from '../ui/button';
+import { MessageCircleCode } from 'lucide-react';
+import WorkspaceHistory from './WorkspaceHistory';
+import SideBarFooter from './SidebarFooter';
 
 function AppSideBar() {
   return (
@@ -22,9 +23,11 @@ function AppSideBar() {
         <SidebarGroup>
             <WorkspaceHistory />
         </SidebarGroup>
-        <SidebarGroup />
+        {/* <SidebarGroup /> */}
       </SidebarContent>
-      <SidebarFooter />
+      <SidebarFooter>
+          <SideBarFooter />
+      </SidebarFooter>
     </Sidebar>
   )
 }
