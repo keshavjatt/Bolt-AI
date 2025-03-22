@@ -1,35 +1,37 @@
 import { HelpCircle, LogOut, Settings, Wallet } from 'lucide-react';
 import React from 'react';
+import { Button } from '../ui/button';
 
 function SideBarFooter() {
-  const options=[
+  const options = [
     {
       name: 'Settings',
-      icons: Settings 
+      icon: Settings
     },
     {
       name: 'Help Center',
-      icons: HelpCircle 
+      icon: HelpCircle
     },
     {
       name: 'My Subscription',
-      icons: Wallet 
+      icon: Wallet
     },
     {
       name: 'Sign Out',
-      icons: LogOut 
+      icon: LogOut
     }
-  ]
+  ];
 
   return (
-    <div>
-        {options.map((option, index)=>{
-          <div>
-              
-          </div>
-        })}
+    <div className='p-2 mb-10'>
+      {options.map((option, index) => (
+        <Button key={index} variant="ghost" className="w-full flex justify-start gap-2">
+          <option.icon />
+          {option.name}
+        </Button>
+      ))}
     </div>
-  )
+  );
 }
 
-export default SideBarFooter
+export default SideBarFooter;
